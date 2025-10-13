@@ -1,22 +1,25 @@
 {
+  "PageLoader": {
+    "title": "ComputingGate",
+    "subtitle": "Advanced Technology Solutions",
+    "loading": "Loading, please wait..."
+  },
   "navigation": {
     "home": "Home",
     "about": "About",
     "services": "Services",
     "portfolio": "Portfolio",
-    "contact": "Contact"
+    "contact": "Contact",
+    "getStarted": "Contact us",
+    "toggleLanguage": "Switch Language",
+    "toggleMenu": "Toggle Menu"
   },
   "hero": {
-    "title": "Computing Gate for Information Technology",
-    "subtitle": "Advanced Technology Solutions & Digital Transformation",
-    "description": "Empowering businesses with cutting-edge software development, cloud computing, and technical support services that drive innovation and growth.",
-    "cta": "Get Started",
-    "learnMore": "Learn More"
+    "call": "Contact us",
+    "whatsapp": "WhatsApp"
   },
   "about": {
-    "title": "About Computing Gate",
     "subtitle": "Your Trusted Technology Partner",
-    "description": "We specialize in providing comprehensive technology solutions that help businesses thrive in the digital age. Our expertise spans across software development, cloud computing, digital transformation, and enterprise technical support.",
     "mission": "Our Mission",
     "missionText": "To empower organizations with innovative technology solutions that drive efficiency, growth, and competitive advantage in today's rapidly evolving digital landscape.",
     "vision": "Our Vision",
@@ -24,27 +27,13 @@
   },
   "services": {
     "title": "Our Services",
-    "subtitle": "Comprehensive Technology Solutions",
-    "software": {
-      "title": "Software Development",
-      "description": "Custom software solutions tailored to your business needs"
-    },
-    "cloud": {
-      "title": "Cloud Computing",
-      "description": "Scalable and secure cloud infrastructure solutions"
-    },
-    "digital": {
-      "title": "Digital Transformation",
-      "description": "Modernize your business processes with digital innovation"
-    },
-    "support": {
-      "title": "Technical Support",
-      "description": "24/7 enterprise-grade technical support and maintenance"
-    }
+    "subtitle": "Comprehensive Technology Solutions"
   },
   "portfolio": {
-    "title": "Our Portfolio",
-    "subtitle": "Showcasing Our Success Stories"
+    "badge": "Our Work",
+    "title": "Portfolio",
+    "description": "Explore our successful projects that showcase our expertise in delivering cutting-edge technology solutions.",
+    "viewAll": "View All Projects"
   },
   "team": {
     "title": "Meet Our Team",
@@ -52,17 +41,49 @@
   },
   "testimonials": {
     "title": "Client Testimonials",
-    "subtitle": "What Our Clients Say About Us"
+    "subtitle": "What Our Clients Say",
+    "description": "Don't just take our word for it. Here's what our satisfied clients have to say about working with us.",
+    "next": "Next testimonial",
+    "previous": "Previous testimonial"
   },
   "contact": {
+    "badge": "Get In Touch",
     "title": "Contact Us",
     "subtitle": "Let's Build Something Amazing Together",
+    "info": {
+      "title": "Contact Information",
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "hours": "Business Hours"
+    },
     "form": {
+      "title": "Send a Message",
       "name": "Name",
       "email": "Email",
       "company": "Company",
+      "phone": "Phone",
       "message": "Message",
-      "submit": "Send Message"
+      "submit": "Send Message",
+      "sending": "Sending...",
+      "sent": "Message Sent!",
+      "success": "✅ The message has been sent successfully and you will be contacted as soon as possible.",
+      "error": "Error sending message, please try again.",
+      "fixErrors": "Please fix the errors above.",
+      "errors": {
+        "name": "Name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email format",
+        "message": "Message is required"
+      }
     }
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "contactTitle": "Contact",
+    "companyName": "ComputingGate",
+    "rights": "All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
   }
 }
