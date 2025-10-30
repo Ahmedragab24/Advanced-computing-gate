@@ -63,7 +63,7 @@ export function TeamSection() {
   return (
     <section
       ref={ref}
-      className="py-20 bg-gradient-to-t from-background/70 to-background/40 relative z-20"
+      className="py-20 bg-gradient-to-t from-background/70 to-background/40 relative z-20 overflow-hidden"
       dir={lang === "ar" ? "rtl" : "ltr"}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">

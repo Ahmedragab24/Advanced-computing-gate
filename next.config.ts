@@ -27,6 +27,22 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // تحسين التوافق مع المتصفحات القديمة
+  compiler: {
+    removeConsole:
+      process.env.NODE_ENV === "production"
+        ? {
+            exclude: ["error", "warn"],
+          }
+        : false,
+  },
+  // إعدادات التوافق مع المتصفحات
+  transpilePackages: [],
+  // إعدادات الأمان والاستقرار
+  reactStrictMode: true,
+  poweredByHeader: false,
+  // تحسين الأداء على الأجهزة الضعيفة
+  productionBrowserSourceMaps: false,
 };
 
 export default withNextIntl(nextConfig);

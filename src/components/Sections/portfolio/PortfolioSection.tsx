@@ -52,7 +52,7 @@ export function PortfolioSection() {
     <section
       id="portfolio"
       ref={ref}
-      className="py-20 bg-gradient-to-b from-background/50 to-background"
+      className="py-20 bg-gradient-to-b from-background/50 to-background relative overflow-hidden"
       dir={lang === "ar" ? "rtl" : "ltr"}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Sphere, MeshDistortMaterial } from "@react-three/drei";
 import * as THREE from "three";
@@ -19,7 +19,7 @@ function FloatingOrb({
   useFrame(({ clock }) => {
     if (meshRef.current) {
       const t = clock.elapsedTime;
-      meshRef.current.rotation.y = t * speed * 0.3; 
+      meshRef.current.rotation.y = t * speed * 0.3;
       meshRef.current.position.y = position[1] + Math.sin(t * speed) * 0.3;
     }
   });
@@ -28,8 +28,8 @@ function FloatingOrb({
     <Sphere ref={meshRef} args={[1, 24, 24]} position={position}>
       <MeshDistortMaterial
         color={color}
-        distort={0.25} 
-        speed={1.5} 
+        distort={0.25}
+        speed={1.5}
         roughness={0.3}
         metalness={0.05}
         emissive={color}
@@ -42,6 +42,9 @@ function FloatingOrb({
 }
 
 export function FloatingOrbs() {
+  const [canRender, setCanRender] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
   const orbs = useMemo(
     () => [
       {
@@ -64,22 +67,46 @@ export function FloatingOrbs() {
     []
   );
 
-  return (
-    <div className="fixed inset-0 z-0 blur-2xl">
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 70 }}
-        style={{ background: "transparent" }}
-        dpr={[1, 1.5]} 
-      >
-        <ambientLight intensity={0.05} />
-        <pointLight position={[10, 10, 10]} intensity={0.05} />
-        <directionalLight position={[-5, 5, 5]} intensity={0.05} />
+  useEffect(() => {
+    try {
+      const isClient = typeof window !== "undefined";
+      if (!isClient) return;
 
-        {orbs.map((orb, index) => (
-          <FloatingOrb key={index} {...orb} />
-        ))}
+      const canvas = document.createElement("canvas");
+      const gl =
+        canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      setCanRender(Boolean(gl));
+    } catch (error) {
+      console.warn("WebGL not supported:", error);
+      setHasError(true);
+      setCanRender(false);
+    }
+  }, []);
 
-      </Canvas>
-    </div>
-  );
+  if (hasError || !canRender) {
+    return null;
+  }
+
+  try {
+    return (
+      <div className="fixed inset-0 z-0 blur-2xl">
+        <Canvas
+          camera={{ position: [0, 0, 5], fov: 70 }}
+          style={{ background: "transparent" }}
+          dpr={[1, 1.5]}
+        >
+          <ambientLight intensity={0.05} />
+          <pointLight position={[10, 10, 10]} intensity={0.05} />
+          <directionalLight position={[-5, 5, 5]} intensity={0.05} />
+
+          {orbs.map((orb, index) => (
+            <FloatingOrb key={index} {...orb} />
+          ))}
+        </Canvas>
+      </div>
+    );
+  } catch (error) {
+    console.warn("Error rendering FloatingOrbs:", error);
+    return null;
+  }
 }

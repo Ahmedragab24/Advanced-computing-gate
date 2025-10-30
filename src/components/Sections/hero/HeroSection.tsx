@@ -1,11 +1,10 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
-import { ParticleBackground } from "@/components/Sections/particles/ParticleField";
-import { FloatingOrbs } from "@/components/Sections/particles/FloatingOrbs";
 import { easeOut } from "framer-motion";
 import { HeroSectionResponseType } from "@/types/Hero";
 import { getHeroSectionData } from "@/lib/Api/HeroSection";
@@ -13,10 +12,39 @@ import { LangType } from "@/types";
 import ContactBtns from "@/components/Buttons/ContactBtns";
 import Status from "./Status";
 
+// Defer heavy WebGL components to the client only to avoid hydration/runtime issues
+const ParticleBackground = dynamic(
+  () =>
+    import("@/components/Sections/particles/ParticleField")
+      .then((m) => m.ParticleBackground)
+      .catch((error) => {
+        console.warn("Failed to load ParticleBackground:", error);
+        return () => null;
+      }),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
+const FloatingOrbs = dynamic(
+  () =>
+    import("@/components/Sections/particles/FloatingOrbs")
+      .then((m) => m.FloatingOrbs)
+      .catch((error) => {
+        console.warn("Failed to load FloatingOrbs:", error);
+        return () => null;
+      }),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
+
 export function HeroSection() {
   const lang = useLocale() as LangType;
   const heroRef = useRef<HTMLDivElement>(null);
   const [HeroData, setHeroData] = useState<HeroSectionResponseType>();
+  const [canRender3D, setCanRender3D] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +55,20 @@ export function HeroSection() {
 
     fetchData();
   }, [lang]);
+
+  // Guard rendering of WebGL content on environments that don't support it
+  useEffect(() => {
+    try {
+      const isClient = typeof window !== "undefined";
+      if (!isClient) return;
+      const canvas = document.createElement("canvas");
+      const gl =
+        canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      setCanRender3D(Boolean(gl));
+    } catch {
+      setCanRender3D(false);
+    }
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -52,9 +94,9 @@ export function HeroSection() {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center overflow-hidden">
-      <ParticleBackground />
-      <FloatingOrbs />
+    <section className="min-h-screen flex items-center gap-4 justify-center overflow-hidden">
+      {canRender3D && <ParticleBackground />}
+      {canRender3D && <FloatingOrbs />}
 
       <div
         ref={heroRef}
@@ -66,7 +108,7 @@ export function HeroSection() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="max-w-4xl mx-auto"
+          className="md:max-w-4xl mx-auto"
         >
           <motion.div variants={itemVariants} className="mb-6">
             <div className="inline-flex items-center px-4 py-2 rounded-full glass-effect border">

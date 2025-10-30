@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 import "../globals.css";
 import { ThemeProvider } from "@/components/Providers/theme-provider";
-import { PageLoader } from "@/components/Sections/loading/PageLoader";
 import { NextIntlClientProvider } from "next-intl";
 import { Toaster } from "@/components/ui/sonner";
+import { ErrorBoundary } from "@/components/ErrorBoundary/ErrorBoundary";
+import { GlobalErrorHandler } from "@/components/ErrorBoundary/GlobalErrorHandler";
 
 const cairo = Cairo({
   subsets: ["latin"],
@@ -73,16 +74,18 @@ export default async function RootLayout({
     >
       <NextIntlClientProvider locale={locale}>
         <body className={`${cairo.variable} font-sans antialiased`}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <PageLoader />
-            {children}
-            <Toaster />
-          </ThemeProvider>
+          <GlobalErrorHandler />
+          <ErrorBoundary>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </ErrorBoundary>
         </body>
       </NextIntlClientProvider>
     </html>

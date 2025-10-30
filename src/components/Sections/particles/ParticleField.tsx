@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
@@ -37,7 +37,7 @@ function ParticleField() {
     >
       <PointMaterial
         transparent
-        color={particleColor} 
+        color={particleColor}
         size={0.08}
         sizeAttenuation
         depthWrite={false}
@@ -48,16 +48,44 @@ function ParticleField() {
 }
 
 export function ParticleBackground() {
-  return (
-    <div className="fixed inset-0 z-0">
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 75 }}
-        style={{ background: "transparent" }}
-        dpr={[1, 1.5]}
-        performance={{ min: 0.5 }}
-      >
-        <ParticleField />
-      </Canvas>
-    </div>
-  );
+  const [canRender, setCanRender] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    try {
+      const isClient = typeof window !== "undefined";
+      if (!isClient) return;
+
+      const canvas = document.createElement("canvas");
+      const gl =
+        canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      setCanRender(Boolean(gl));
+    } catch (error) {
+      console.warn("WebGL not supported for ParticleBackground:", error);
+      setHasError(true);
+      setCanRender(false);
+    }
+  }, []);
+
+  if (hasError || !canRender) {
+    return null;
+  }
+
+  try {
+    return (
+      <div className="fixed inset-0 z-0">
+        <Canvas
+          camera={{ position: [0, 0, 5], fov: 75 }}
+          style={{ background: "transparent" }}
+          dpr={[1, 1.5]}
+          performance={{ min: 0.5 }}
+        >
+          <ParticleField />
+        </Canvas>
+      </div>
+    );
+  } catch (error) {
+    console.warn("Error rendering ParticleBackground:", error);
+    return null;
+  }
 }
